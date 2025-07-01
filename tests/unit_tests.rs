@@ -45,8 +45,8 @@ fn test_script_classification() {
 
 #[test]
 fn test_outpoint_destructuring() {
-    let op = Outpoint("abcd1234".to_string(), 1);
-    let Outpoint(txid, vout) = op;
+    let op = Outpoint { txid: "abcd1234".to_string(), vout: 1 };
+    let Outpoint { txid, vout } = op;
     assert_eq!(txid, "abcd1234");
     assert_eq!(vout, 1);
 }
@@ -96,5 +96,8 @@ fn test_utxo_ownership() {
         vout: 0,
         value: 1000,
     };
-    assert_eq!(consume_utxo(utxo.clone()), utxo);
+    let spent = consume_utxo(utxo.clone());
+    assert_eq!(spent.txid, utxo.txid);
+    assert_eq!(spent.vout, utxo.vout);
+    assert_eq!(spent.value, 0);
 }
